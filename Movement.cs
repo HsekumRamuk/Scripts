@@ -12,7 +12,10 @@ public class Movement : MonoBehaviour
     [SerializeField] float mainThrust = 100f;
     [SerializeField] float rotationThrust = 10f;
     [SerializeField] AudioClip rocketEngineThrust;
-    [SerializeField] ParticleSystem rocketThrustParticles;
+    [SerializeField] ParticleSystem mainEngineThrustParticles;
+    [SerializeField] ParticleSystem leftThrustParticles;
+    [SerializeField] ParticleSystem rightThrustParticels;
+
     AudioSource myThrustAudio;
     Rigidbody MyRigidBody;
     
@@ -41,17 +44,21 @@ public class Movement : MonoBehaviour
             if(Input.GetKey(KeyCode.Space))
             {
                 MyRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-                if(!myThrustAudio.isPlaying)
+                if (!myThrustAudio.isPlaying)
                 {
                     myThrustAudio.PlayOneShot(rocketEngineThrust);
-                    rocketThrustParticles.Play();
+                }
 
+                if (!mainEngineThrustParticles.isPlaying)
+                {
+                    mainEngineThrustParticles.Play();
                 }
             }
 
             else
             {
                 myThrustAudio.Stop();
+                mainEngineThrustParticles.Stop();
             }
 
         }
@@ -62,12 +69,30 @@ public class Movement : MonoBehaviour
              {
                 //Calling method here
                 ApplyRotation(rotationThrust);
-             }
 
-            else if (Input.GetKey(KeyCode.D))
+                if (!rightThrustParticels.isPlaying)
+                 {
+                     rightThrustParticels.Play();
+                 }
+               
+             }
+             
+             
+             else if (Input.GetKey(KeyCode.D))
              {
                 //Calling method here
                  ApplyRotation(-rotationThrust);
+
+                 if (!leftThrustParticles.isPlaying)
+                 {
+                    leftThrustParticles.Play();
+                 }
+             }
+
+             else
+             {
+                rightThrustParticels.Stop();
+                leftThrustParticles.Stop();
              }
         }       
             // Created method here
