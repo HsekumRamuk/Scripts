@@ -9,10 +9,13 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {   
     // creating My variables
-    AudioSource myThrustAudio;
-    Rigidbody MyRigidBody;
     [SerializeField] float mainThrust = 100f;
     [SerializeField] float rotationThrust = 10f;
+    [SerializeField] AudioClip rocketEngineThrust;
+    [SerializeField] ParticleSystem rocketThrustParticles;
+    AudioSource myThrustAudio;
+    Rigidbody MyRigidBody;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +43,9 @@ public class Movement : MonoBehaviour
                 MyRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
                 if(!myThrustAudio.isPlaying)
                 {
-                    myThrustAudio.Play();
+                    myThrustAudio.PlayOneShot(rocketEngineThrust);
+                    rocketThrustParticles.Play();
+
                 }
             }
 
@@ -64,12 +69,12 @@ public class Movement : MonoBehaviour
                 //Calling method here
                  ApplyRotation(-rotationThrust);
              }
-    }       
+        }       
             // Created method here
           void ApplyRotation(float myRotation)
          {
             MyRigidBody.freezeRotation = true; //Freeze rotation so we can manually rotate  
-            transform.Rotate(Vector3.forward * myRotation * Time.deltaTime);
+            transform.Rotate(Vector3.forward * myRotation * Time.deltaTime);                                        
             MyRigidBody.freezeRotation = false; // unfreezing rotation so physics system can take over
          }
 
