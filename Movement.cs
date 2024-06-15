@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {   
@@ -16,6 +17,8 @@ public class Movement : MonoBehaviour
     [SerializeField] ParticleSystem leftThrustParticles;
     [SerializeField] ParticleSystem rightThrustParticels;
 
+
+    // Cashing References
     AudioSource myThrustAudio;
     Rigidbody MyRigidBody;
     
@@ -23,6 +26,7 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
        MyRigidBody = GetComponent<Rigidbody>();
        myThrustAudio = GetComponent<AudioSource>();
        
@@ -31,76 +35,136 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            // calling the method here
+
+        // calling the method here
         ProcessThrust();
         ProcessRotation();
-        
-        
+
+     
     }
 
+
         // This is my method
-        void ProcessThrust()
+    void ProcessThrust()
+    {
+
+        if(Input.GetKey(KeyCode.Space))
         {
-            if(Input.GetKey(KeyCode.Space))
-            {
-                MyRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-                if (!myThrustAudio.isPlaying)
-                {
-                    myThrustAudio.PlayOneShot(rocketEngineThrust);
-                }
+            // calling the method here
+            StartThrusting();
+        }
 
-                if (!mainEngineThrustParticles.isPlaying)
-                {
-                    mainEngineThrustParticles.Play();
-                }
-            }
+        else
+        {
+            // calling the method here
+            StopThrusting();
+        }
 
-            else
-            {
-                myThrustAudio.Stop();
-                mainEngineThrustParticles.Stop();
-            }
+    }
+
+
+        // This is my method
+         void ProcessRotation()
+    {
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            // calling the method here
+            RotateLeft();
+        }
+
+        else if (Input.GetKey(KeyCode.D))
+        {
+            // calling the method here
+            RotateRight();
+        }
+
+        else
+        {
+            // calling the method here
+            StopRotating();
+        }
+
+    }
+
+    
+        // Created method here
+    void StartThrusting()
+    {
+
+        MyRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+        if (!myThrustAudio.isPlaying)
+        {
+            myThrustAudio.PlayOneShot(rocketEngineThrust);
+        }
+
+        if (!mainEngineThrustParticles.isPlaying)
+        {
+            mainEngineThrustParticles.Play();
+        }
+
+    }
+
+
+        // Created method here
+     void StopThrusting()
+    {
+
+        myThrustAudio.Stop();
+        mainEngineThrustParticles.Stop();
+
+    }
+
+
+        // Created method here
+    void RotateLeft()
+    {
+
+        //Calling method here
+        ApplyRotation(rotationThrust);
+
+        if (!rightThrustParticels.isPlaying)
+        {
+            rightThrustParticels.Play();
+        }
+
+    }
+
+       
+        // Created method here
+    void RotateRight()
+    {
+
+        //Calling method here
+        ApplyRotation(-rotationThrust);
+
+        if (!leftThrustParticles.isPlaying)
+        {
+            leftThrustParticles.Play();
 
         }
-            // // Created method here
-        void ProcessRotation()
-        {
-             if (Input.GetKey(KeyCode.A))
-             {
-                //Calling method here
-                ApplyRotation(rotationThrust);
+    }
 
-                if (!rightThrustParticels.isPlaying)
-                 {
-                     rightThrustParticels.Play();
-                 }
-               
-             }
-             
-             
-             else if (Input.GetKey(KeyCode.D))
-             {
-                //Calling method here
-                 ApplyRotation(-rotationThrust);
 
-                 if (!leftThrustParticles.isPlaying)
-                 {
-                    leftThrustParticles.Play();
-                 }
-             }
+        // Created method here   
+     void StopRotating()
+    {
 
-             else
-             {
-                rightThrustParticels.Stop();
-                leftThrustParticles.Stop();
-             }
-        }       
-            // Created method here
-          void ApplyRotation(float myRotation)
+        rightThrustParticels.Stop();
+        leftThrustParticles.Stop();
+
+    }
+
+
+
+    // Created method here
+    void ApplyRotation(float myRotation)
          {
+
             MyRigidBody.freezeRotation = true; //Freeze rotation so we can manually rotate  
             transform.Rotate(Vector3.forward * myRotation * Time.deltaTime);                                        
             MyRigidBody.freezeRotation = false; // unfreezing rotation so physics system can take over
+
          }
 
 

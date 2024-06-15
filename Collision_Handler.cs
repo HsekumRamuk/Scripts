@@ -15,15 +15,31 @@ public class Collision_Handler : MonoBehaviour
     AudioSource deathFinishedSound;
     
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
     void Start()
     {
         deathFinishedSound = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled;
+        }
+        
+    }
+
+
   void OnCollisionEnter(Collision other)
   {
-        if(isTransitioning)
+        if(isTransitioning || collisionDisabled)
         {
             return;
         }
