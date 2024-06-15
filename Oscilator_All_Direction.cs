@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Oscilator_All_Direciton : MonoBehaviour
+public class Oscilator_All_Direction : MonoBehaviour
 {
     // my created Variables here
     Vector3 startPosition;
